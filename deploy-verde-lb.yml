@@ -1,0 +1,37 @@
+#test-loadbalancer.yml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: verde-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      role: verde-app
+  template:
+    metadata:
+      labels:
+        role: verde-app
+    spec:
+      containers:
+      - name: verde-app
+        image: gcr.io/google-samples/hello-app:1.0
+        ports:
+        - containerPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: verde-lb
+  annotations:
+    metallb.universe.tf/address-pool: myPool  #Pool-IP
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    role: verde-app

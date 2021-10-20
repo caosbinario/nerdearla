@@ -1,0 +1,13 @@
+# configmap.yml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: metallb-system
+  name: config
+data:
+  config: |
+    address-pools:
+    - name: myPool # <-- Pool
+      protocol: layer2
+      addresses:
+      - 192.168.0.20-192.168.0.30 # <-- Rango IPs
